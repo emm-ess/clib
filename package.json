@@ -1,0 +1,49 @@
+{
+  "name": "clib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky install",
+    "lint": "eslint --ext .json,.js,.ts --report-unused-disable-directives --cache --fix .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Marten Schälicke",
+    "email": "hallo@emm-ess.de",
+    "url": "https://emm-ess.de"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emm-ess/clib.git",
+    "directory": "packages/eslint-config-emm-ess"
+  },
+  "homepage": "https://github.com/emm-ess/clib",
+  "bugs": "https://github.com/emm-ess/clib/issues",
+  "license": "MIT",
+  "browserslist": [
+    "maintained node versions"
+  ],
+  "dependencies": {
+    "serialport": "^9.2.8",
+    "simplex-noise": "^3.0.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "16.0.2",
+    "@commitlint/config-conventional": "16.0.0",
+    "@emm-ess-configs/eslint-config": "https://gitpkg.now.sh/emm-ess/emm-ess-configs/packages/eslint-config?main",
+    "@types/node": "17.0.8",
+    "@typescript-eslint/eslint-plugin": "5.9.1",
+    "@typescript-eslint/parser": "5.9.1",
+    "eslint-plugin-compat": "4.0.1",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.7",
+    "typescript": "4.5.4"
+  },
+  "commitlint": {
+    "extends": "@commitlint/config-conventional"
+  },
+  "lint-staged": {
+    "*.{ts,js,json}": "eslint --cache --fix"
+  }
+}
