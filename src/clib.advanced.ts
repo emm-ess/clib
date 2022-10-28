@@ -1,11 +1,11 @@
-import SimplexNoise from 'simplex-noise'
+import {createNoise2D} from 'simplex-noise'
 
 import Clib from './clib.simple'
 import {MAX_POWER, MIN_POWER} from './const'
 import {clamp} from './library'
 
 export default class ClibAdvanced extends Clib {
-    simplex = new SimplexNoise()
+    simplex = createNoise2D()
     descriptor = {
         current: 0,
         target: 0,
@@ -38,6 +38,8 @@ export default class ClibAdvanced extends Clib {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     private async tick(): Promise<void> {
         // this.updateCurrentPowerTarget()
         const value = this.getNextValue()
@@ -49,7 +51,7 @@ export default class ClibAdvanced extends Clib {
             return this.descriptor.current
         }
 
-        const delta = (this.simplex.noise2D(0, this.roughness) - 0.5) * this.range * MAX_POWER
+        const delta = (this.simplex(0, this.roughness) - 0.5) * this.range * MAX_POWER
         return clamp(this.descriptor.current + delta, MIN_POWER, MAX_POWER)
     }
 }
