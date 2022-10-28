@@ -1,12 +1,17 @@
 {
   "name": "clib",
   "version": "1.0.0",
+  "private": true,
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "type": "module",
   "scripts": {
     "prepare": "husky install",
     "lint": "eslint --ext .json,.js,.ts --report-unused-disable-directives --cache --fix .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "start": "NODE_OPTIONS='--experimental-specifier-resolution=node' node dist/index.js"
   },
   "author": {
     "name": "Marten Schälicke",
@@ -25,13 +30,16 @@
     "maintained node versions"
   ],
   "dependencies": {
-    "serialport": "^9.2.8",
+    "inquirer": "^9.1.4",
+    "serialport": "10.4.0",
     "simplex-noise": "^3.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "16.0.2",
     "@commitlint/config-conventional": "16.0.0",
     "@emm-ess-configs/eslint-config": "https://gitpkg.now.sh/emm-ess/emm-ess-configs/packages/eslint-config?main",
+    "@tsconfig/node16-strictest-esm": "^1.0.3",
+    "@types/inquirer": "^9.0.2",
     "@types/node": "17.0.8",
     "@typescript-eslint/eslint-plugin": "5.9.1",
     "@typescript-eslint/parser": "5.9.1",

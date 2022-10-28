@@ -17,6 +17,12 @@ module.exports = {
             parserOptions: {
                 project: ['./tsconfig.json'],
             },
+            rules: {
+                // yeah, me being lazy...
+                'no-async-promise-executor': 0,
+                'prefer-promise-reject-errors': 0,
+                '@typescript-eslint/no-floating-promises': 0,
+            }
         },
         {
             files: ['./*.js'],
