@@ -22,6 +22,7 @@ module.exports = {
                 'no-async-promise-executor': 0,
                 'prefer-promise-reject-errors': 0,
                 '@typescript-eslint/no-floating-promises': 0,
+                '@typescript-eslint/no-namespace': [2, {'allowDeclarations': true}],
             }
         },
         {

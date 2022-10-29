@@ -2,9 +2,10 @@ import inquirer from 'inquirer'
 
 import Clib from './clib.simple'
 import {ARDUINO_REGEX} from './const'
-import {sleep} from './library'
+import {ButtplugServer} from './server'
 
 let clib: Clib
+let server: ButtplugServer
 
 // exit code taken from https://stackoverflow.com/questions/14031763/doing-a-cleanup-action-just-before-node-js-exits
 // so the program will not close instantly
@@ -13,6 +14,9 @@ process.stdin.resume()
 async function exitHandler(exit = false, exitCode?: number): Promise<void> {
     if (clib) {
         await clib.close()
+    }
+    if (server) {
+        server.close()
     }
     if (exit) {
         // eslint-disable-next-line unicorn/no-process-exit
@@ -45,13 +49,8 @@ async function main() {
     if (selectedPath) {
         clib = new Clib(selectedPath)
         await clib.open()
-        await clib.setPower(1)
-        console.log('wait 1')
-        await sleep(5000)
-        await clib.setPower(60)
-        console.log('wait 2')
-        await sleep(5000)
+        server = new ButtplugServer(clib)
     }
 }
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-main()
+await main()
