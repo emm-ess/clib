@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "rimraf dist",
     "build": "tsc",
-    "start": "NODE_OPTIONS='--experimental-specifier-resolution=node' node dist/index.js"
+    "start": " node --experimental-specifier-resolution=node dist/index.js"
   },
   "author": {
     "name": "Marten Schälicke",
@@ -30,31 +30,34 @@
     "maintained node versions"
   ],
   "dependencies": {
-    "inquirer": "^9.1.4",
-    "loglevel": "^1.8.0",
-    "serialport": "10.4.0",
+    "inquirer": "^9.2.11",
+    "loglevel": "^1.8.1",
+    "serialport": "12.0.0",
     "simplex-noise": "^4.0.1",
-    "ws": "^8.10.0"
+    "ws": "^8.14.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.1.2",
-    "@commitlint/config-conventional": "17.1.0",
+    "@commitlint/cli": "17.7.1",
+    "@commitlint/config-conventional": "17.7.0",
     "@emm-ess-configs/eslint-config": "https://gitpkg.now.sh/emm-ess/emm-ess-configs/packages/eslint-config?main",
-    "@tsconfig/node16-strictest-esm": "^1.0.3",
-    "@types/inquirer": "^9.0.2",
-    "@types/node": "16.18.2",
-    "@types/ws": "^8.5.3",
-    "@typescript-eslint/eslint-plugin": "5.41.0",
-    "@typescript-eslint/parser": "5.41.0",
-    "eslint-plugin-compat": "4.0.2",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
-    "typescript": "4.8.4"
+    "@tsconfig/node18-strictest-esm": "1.0.1",
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "18.15.3",
+    "@types/ws": "^8.5.5",
+    "@typescript-eslint/eslint-plugin": "6.7.0",
+    "@typescript-eslint/parser": "6.7.0",
+    "eslint-plugin-compat": "4.2.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "typescript": "5.2.2"
   },
   "commitlint": {
     "extends": "@commitlint/config-conventional"
   },
   "lint-staged": {
     "*.{ts,js,json}": "eslint --cache --fix"
-  }
+  },
+    "overrides": {
+        "eslint-plugin-unicorn": "48.0.1"
+    }
 }

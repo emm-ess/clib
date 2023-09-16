@@ -10,6 +10,9 @@ module.exports = {
         project: './tsconfig.json',
     },
     extends: '@emm-ess-configs/eslint-config',
+    rules: {
+        'unicorn/expiring-todo-comments': 'off',
+    },
     overrides: [
         {
             files: ['*.ts'],

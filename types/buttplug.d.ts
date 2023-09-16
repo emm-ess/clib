@@ -253,7 +253,7 @@ declare namespace Buttplug {
         /** Specifies granularity of each feature on the device. */
         StepCount: number
         /** Denotes type of actuator (Vibrator, Linear, Oscillator, etc...) */
-        ActuatorType: ActuatorType
+        ActuatorType: ActuatorType[keyof ActuatorType]
     }
 
     /** Sends a vibrate command to a device that supports vibration. */
@@ -266,7 +266,7 @@ declare namespace Buttplug {
                 /** Actuator scalar (floating point, range can vary), stepping will be device specific. */
                 Scalar: number
                 /** Actuator type that is expected to be controlled with this subcommand. */
-                ActuatorType: ActuatorType
+                ActuatorType: ActuatorType[keyof ActuatorType]
             }>
         }
     }

@@ -1,5 +1,5 @@
 import log from 'loglevel'
-import {RawData, WebSocket, WebSocketServer} from 'ws'
+import {WebSocket, WebSocketServer} from 'ws'
 
 import {
     ActuatorType,
@@ -62,7 +62,7 @@ class ButtplugConnection {
         ws.on('message', this.handleMessage.bind(this))
     }
 
-    handleMessage(data: RawData): void {
+    handleMessage(data: Buffer): void {
         if (!data) {
             log.info('received empty message')
             return
