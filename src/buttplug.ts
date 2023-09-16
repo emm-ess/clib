@@ -14,30 +14,34 @@ export enum SensorType {
     PRESSURE = 'Pressure',
 }
 
-export function isRequestServerInfoMessage(message: unknown): message is Buttplug.RequestServerInfoMessage {
-    return !!(message as Buttplug.RequestServerInfoMessage).RequestServerInfo
+export function isRequestServerInfo(message: unknown): message is Buttplug.RequestServerInfo {
+    return !!(message as Buttplug.RequestServerInfo).RequestServerInfo
 }
 
-export function isRequestDeviceListMessage(message: unknown): message is Buttplug.RequestDeviceListMessage {
-    return !!(message as Buttplug.RequestDeviceListMessage).RequestDeviceList
+export function isRequestDeviceList(message: unknown): message is Buttplug.RequestDeviceList {
+    return !!(message as Buttplug.RequestDeviceList).RequestDeviceList
 }
 
-export function isStartScanningMessage(message: unknown): message is Buttplug.StartScanningMessage {
-    return !!(message as Buttplug.StartScanningMessage).StartScanning
+export function isStartScanning(message: unknown): message is Buttplug.StartScanning {
+    return !!(message as Buttplug.StartScanning).StartScanning
 }
 
-export function isStopScanningMessage(message: unknown): message is Buttplug.StopScanningMessage {
-    return !!(message as Buttplug.StopScanningMessage).StopScanning
+export function isStopScanning(message: unknown): message is Buttplug.StopScanning {
+    return !!(message as Buttplug.StopScanning).StopScanning
 }
 
-export function isVibrateCmdMessage(message: unknown): message is Buttplug.Deprecated.VibrateCmdMessage {
-    return !!(message as Buttplug.Deprecated.VibrateCmdMessage).VibrateCmd
+export function isStopDevice(message: unknown): message is Buttplug.StopDevice {
+    return !!(message as Buttplug.StopDevice).StopDeviceCmd
 }
 
-export function isStopDeviceMessage(message: unknown): message is Buttplug.StopDeviceMessage {
-    return !!(message as Buttplug.StopDeviceMessage).StopDeviceCmd
+export function isStopAllDevices(message: unknown): message is Buttplug.StopAllDevices {
+    return !!(message as Buttplug.StopAllDevices).StopAllDevices
 }
 
-export function isStopAllDevicesMessage(message: unknown): message is Buttplug.StopAllDevicesMessage {
-    return !!(message as Buttplug.StopAllDevicesMessage).StopAllDevices
+export function isVibrateCmd(message: unknown): message is Buttplug.Deprecated.VibrateCmd {
+    return !!(message as Buttplug.Deprecated.VibrateCmd).VibrateCmd
+}
+
+export function isScalarCmd(message: unknown): message is Buttplug.ScalarCmd {
+    return !!(message as Buttplug.ScalarCmd).ScalarCmd
 }

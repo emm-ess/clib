@@ -2,13 +2,22 @@ import log from 'loglevel'
 import {RawData, WebSocket, WebSocketServer} from 'ws'
 
 import {
-    isRequestDeviceListMessage,
-    isRequestServerInfoMessage,
-    isStartScanningMessage, isStopAllDevicesMessage, isStopDeviceMessage,
-    isStopScanningMessage, isVibrateCmdMessage,
+    ActuatorType,
+    isRequestDeviceList,
+    isRequestServerInfo,
+    isScalarCmd,
+    isStartScanning, isStopAllDevices, isStopDevice,
+    isStopScanning, isVibrateCmd,
 } from './buttplug'
 import type Clib from './clib.simple'
-import {CLIB_DEVICE_DESCRIPTION_V2, MAX_POWER, WEBSOCKET_PORT} from './const'
+import {
+    CLIB_DEVICE_DESCRIPTION_V2,
+    CLIB_DEVICE_DESCRIPTION_V3,
+    MAX_POWER,
+    WEBSOCKET_PORT,
+} from './const'
+
+log.setLevel('debug')
 
 export class ButtplugServer extends WebSocketServer {
     connection: ButtplugConnection | undefined
@@ -31,7 +40,7 @@ export class ButtplugServer extends WebSocketServer {
     }
 }
 
-function getClientMessageId(message: Buttplug.Message): number {
+function getClientMessageId(message: Buttplug.Command): number {
     return Object.values(message)[0]?.Id || 0
 }
 
@@ -39,6 +48,7 @@ class ButtplugConnection {
     ws: WebSocket
     clib: Clib
     _nextMessageId = 0
+    clientMessageVersion = 3
 
     get nextMessageId(): number {
         const id = this._nextMessageId
@@ -59,7 +69,7 @@ class ButtplugConnection {
         }
         log.debug('received: %s', data)
 
-        const parsed = JSON.parse(data.toString()) as Buttplug.Message[]
+        const parsed = JSON.parse(data.toString()) as Buttplug.Command[]
         if (!Array.isArray(parsed)) {
             log.info('invalid message')
         }
@@ -68,27 +78,30 @@ class ButtplugConnection {
         this.send(responseMessages)
     }
 
-    send(message: Buttplug.Message[]): void {
+    send(message: Buttplug.Command[]): void {
         const messageString = JSON.stringify(message)
         log.debug('send: %s', messageString)
         this.ws.send(messageString)
     }
 
-    answerMessage(message: Buttplug.Message): Buttplug.Message {
-        if (isRequestServerInfoMessage(message)) {
+    answerMessage(message: Buttplug.Command): Buttplug.Command {
+        if (isRequestServerInfo(message)) {
             return this.handleRequestServerInfoMessage(message)
         }
-        if (isRequestDeviceListMessage(message)) {
+        if (isRequestDeviceList(message)) {
             return this.handleRequestDeviceListMessage(message)
         }
-        if (isVibrateCmdMessage(message)) {
+        if (isVibrateCmd(message)) {
             return this.handleVibrateCmdMessage(message)
         }
-        if (isStopDeviceMessage(message) || isStopAllDevicesMessage(message)) {
+        if (isStopDevice(message) || isStopAllDevices(message)) {
             return this.handleStopMessage(message)
         }
-        if (isStartScanningMessage(message) || isStopScanningMessage(message)) {
+        if (isStartScanning(message) || isStopScanning(message)) {
             return this.returnOkHandler(message)
+        }
+        if (isScalarCmd(message)) {
+            return this.handleScalarCmdMessage(message)
         }
         log.error('could not process message: %s', message)
         return {
@@ -100,27 +113,31 @@ class ButtplugConnection {
         }
     }
 
-    handleRequestServerInfoMessage(message: Buttplug.RequestServerInfoMessage): Buttplug.ServerInfoMessage {
+    handleRequestServerInfoMessage(message: Buttplug.RequestServerInfo): Buttplug.ServerInfo {
+        this.clientMessageVersion = message.RequestServerInfo.MessageVersion
         return {
             ServerInfo: {
                 Id: message.RequestServerInfo.Id,
                 ServerName: 'Clib-Server',
-                MessageVersion: 2,
+                MessageVersion: this.clientMessageVersion,
                 MaxPingTime: 0,
             },
         }
     }
 
-    handleRequestDeviceListMessage(message: Buttplug.RequestDeviceListMessage): Buttplug.DeviceListMessage | Buttplug.ErrorMessage {
+    handleRequestDeviceListMessage(message: Buttplug.RequestDeviceList): Buttplug.DeviceList | Buttplug.Error {
+        const deviceDescription = this.clientMessageVersion === 3
+            ? CLIB_DEVICE_DESCRIPTION_V3
+            : CLIB_DEVICE_DESCRIPTION_V2
         return {
             DeviceList: {
                 Id: message.RequestDeviceList.Id,
-                Devices: [CLIB_DEVICE_DESCRIPTION_V2],
+                Devices: [deviceDescription],
             },
         }
     }
 
-    handleVibrateCmdMessage(message: Buttplug.Deprecated.VibrateCmdMessage): Buttplug.OkMessage {
+    handleVibrateCmdMessage(message: Buttplug.Deprecated.VibrateCmd): Buttplug.Ok {
         const power = (message.VibrateCmd.Speeds[0]?.Speed || 0) * MAX_POWER
         this.clib.setPower(power)
         return {
@@ -130,12 +147,22 @@ class ButtplugConnection {
         }
     }
 
-    handleStopMessage(message: Buttplug.Message): Buttplug.OkMessage {
+    handleScalarCmdMessage(message: Buttplug.ScalarCmd): Buttplug.Ok {
+        const power = (message.ScalarCmd.Scalars.find((entry) => entry.ActuatorType === ActuatorType.VIBRATE)?.Scalar || 0) * MAX_POWER
+        this.clib.setPower(power)
+        return {
+            Ok: {
+                Id: message.ScalarCmd.Id,
+            },
+        }
+    }
+
+    handleStopMessage(message: Buttplug.StopDevice | Buttplug.StopAllDevices): Buttplug.Ok {
         this.clib.setPower(0)
         return this.returnOkHandler(message)
     }
 
-    returnOkHandler(message: Buttplug.Message): Buttplug.OkMessage {
+    returnOkHandler(message: Buttplug.Command): Buttplug.Ok {
         return {
             Ok: {
                 Id: getClientMessageId(message),

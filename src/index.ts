@@ -47,10 +47,14 @@ async function main() {
         default: defaultPath,
     }])
     if (selectedPath) {
+        console.log('port selected')
         clib = new Clib(selectedPath)
+        console.log('clib created')
         await clib.open()
+        console.log('connection opened')
         server = new ButtplugServer(clib)
+        console.log('buttplud started')
     }
 }
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
+
 await main()
