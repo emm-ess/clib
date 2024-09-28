@@ -1,8 +1,8 @@
 import {createNoise2D} from 'simplex-noise'
 
-import Clib from './clib.simple'
-import {MAX_POWER, MIN_POWER} from './const'
-import {clamp} from './library'
+import Clib from './clib.simple.js'
+import {MAX_POWER, MIN_POWER} from './const.js'
+import {clamp} from './library.js'
 
 export default class ClibAdvanced extends Clib {
     simplex = createNoise2D()

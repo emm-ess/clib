@@ -1,23 +1,19 @@
-import type {PortInfo} from '@serialport/bindings-cpp'
 import log from 'loglevel'
 import {SerialPort} from 'serialport'
+import {Deferred} from './library.js'
 
-import {MAX_POWER, MIN_POWER} from './const.js'
-import {clamp, Deferred} from './library.js'
-
-export default class Clib {
+export class Pico {
     port: SerialPort
     openingPromise = new Deferred<void>()
 
     constructor(path: string) {
         const port = this.port = new SerialPort({
             path,
-            baudRate: 9600,
+            baudRate: 115200,
             autoOpen: false,
         })
         port.on('open', () => {
             log.info('port opened')
-            this.setPower(0)
         })
         port.on('error', (error) => {
             log.error('Error:', error.message)
@@ -26,10 +22,6 @@ export default class Clib {
             log.debug('Data:', data.toString('ascii'))
             this.openingPromise.resolve()
         })
-    }
-
-    public static async getPorts(): Promise<PortInfo[]> {
-        return SerialPort.list()
     }
 
     public async open(): Promise<void> {
@@ -46,7 +38,6 @@ export default class Clib {
             return
         }
         return new Promise(async (resolve, reject) => {
-            await this.setPower(0)
             this.port.close((error) => {
                 if (error) {
                     console.log(error)
@@ -58,18 +49,4 @@ export default class Clib {
         })
     }
     /* eslint-enable @typescript-eslint/no-misused-promises */
-
-    public async setPower(power: number): Promise<void> {
-        power = clamp(power, MIN_POWER, MAX_POWER)
-        return new Promise((resolve, reject) => {
-            this.port.write([power])
-            this.port.drain((error) => {
-                if (error) {
-                    reject(error)
-                    return
-                }
-                resolve()
-            })
-        })
-    }
 }
