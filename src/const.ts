@@ -1,4 +1,4 @@
-import {ActuatorType} from './buttplug'
+import {ActuatorType} from './buttplug.js'
 
 export const TICKS_PER_SECOND = 30
 /** in seconds */

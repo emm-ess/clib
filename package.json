@@ -6,12 +6,12 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "prepare": "husky install",
-    "lint": "eslint --ext .json,.js,.ts --report-unused-disable-directives --cache --fix .",
+    "prepare": "husky",
+    "lint": "eslint --report-unused-disable-directives --cache --fix .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "rimraf dist",
     "build": "tsc",
-    "start": " node --experimental-specifier-resolution=node dist/index.js"
+    "start": "node --experimental-specifier-resolution=node dist/index.js"
   },
   "author": {
     "name": "Marten Schälicke",
@@ -30,34 +30,30 @@
     "maintained node versions"
   ],
   "dependencies": {
-    "inquirer": "^9.2.11",
-    "loglevel": "^1.8.1",
-    "serialport": "12.0.0",
-    "simplex-noise": "^4.0.1",
-    "ws": "^8.14.1"
+    "inquirer": "~11.1.0",
+    "loglevel": "~1.9.2",
+    "serialport": "~12.0.0",
+    "simplex-noise": "~4.0.3",
+    "ws": "~8.18.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.7.1",
-    "@commitlint/config-conventional": "17.7.0",
-    "@emm-ess-configs/eslint-config": "https://gitpkg.now.sh/emm-ess/emm-ess-configs/packages/eslint-config?main",
-    "@tsconfig/node18-strictest-esm": "1.0.1",
-    "@types/inquirer": "^9.0.3",
-    "@types/node": "18.15.3",
-    "@types/ws": "^8.5.5",
-    "@typescript-eslint/eslint-plugin": "6.7.0",
-    "@typescript-eslint/parser": "6.7.0",
-    "eslint-plugin-compat": "4.2.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^14.0.1",
-    "typescript": "5.2.2"
+    "@commitlint/cli": "~19.5.0",
+    "@commitlint/config-conventional": "~19.5.0",
+    "@emm-ess-configs/eslint-config": "~0.2.0",
+    "@tsconfig/node-lts": "~20.1.3",
+    "@tsconfig/strictest": "~2.0.5",
+    "@types/inquirer": "~9.0.7",
+    "@types/node": "~22.7.4",
+    "@types/ws": "~8.5.12",
+    "husky": "~9.1.6",
+    "lint-staged": "~15.2.10",
+    "rimraf": "~6.0.1",
+    "typescript": "~5.6.2"
   },
   "commitlint": {
     "extends": "@commitlint/config-conventional"
   },
   "lint-staged": {
     "*.{ts,js,json}": "eslint --cache --fix"
-  },
-    "overrides": {
-        "eslint-plugin-unicorn": "48.0.1"
-    }
+  }
 }

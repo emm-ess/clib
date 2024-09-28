@@ -1,7 +1,10 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "CLIB",
-    "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
+    "extends": [
+        "@tsconfig/node-lts/tsconfig.json",
+        "@tsconfig/strictest/tsconfig.json"
+    ],
     "files": [
         "src/index.ts"
     ],
@@ -10,15 +13,12 @@
         "src/**/*.ts"
     ],
     "compilerOptions": {
-        "baseUrl": ".",
         "outDir": "./dist",
-        "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
         "sourceMap": false,
         "declaration": false,
         "noEmitOnError": true,
         "noImplicitAny": true,
-        "verbatimModuleSyntax": true,
-        "ignoreDeprecations": "5.0"
+        "verbatimModuleSyntax": true
     }
 }

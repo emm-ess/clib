@@ -5,7 +5,6 @@
  * https://buttplug-spec.docs.buttplug.io/#the-need-for-a-computer-controlled-intimate-device-protocol-standard
  */
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 type EmptyObject = {}
 
 declare namespace Buttplug {

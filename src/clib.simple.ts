@@ -2,8 +2,8 @@ import type {PortInfo} from '@serialport/bindings-cpp'
 import log from 'loglevel'
 import {SerialPort} from 'serialport'
 
-import {MAX_POWER, MIN_POWER} from './const'
-import {clamp, Deferred} from './library'
+import {MAX_POWER, MIN_POWER} from './const.js'
+import {clamp, Deferred} from './library.js'
 
 export default class Clib {
     port: SerialPort
@@ -40,24 +40,22 @@ export default class Clib {
         return this.openingPromise.promise
     }
 
-    /* eslint-disable @typescript-eslint/no-misused-promises */
     public async close(): Promise<void> {
         if (!this.port.isOpen) {
             return
         }
-        return new Promise(async (resolve, reject) => {
-            await this.setPower(0)
+        await this.setPower(0)
+        return new Promise((resolve, reject) => {
             this.port.close((error) => {
                 if (error) {
                     console.log(error)
-                    reject()
+                    reject(error)
                     return
                 }
                 resolve()
             })
         })
     }
-    /* eslint-enable @typescript-eslint/no-misused-promises */
 
     public async setPower(power: number): Promise<void> {
         power = clamp(power, MIN_POWER, MAX_POWER)

@@ -1,8 +1,8 @@
 import inquirer from 'inquirer'
 
-import Clib from './clib.simple'
-import {ARDUINO_REGEX} from './const'
-import {ButtplugServer} from './server'
+import Clib from './clib.simple.js'
+import {ARDUINO_REGEX} from './const.js'
+import {ButtplugServer} from './server.js'
 
 let clib: Clib
 let server: ButtplugServer
@@ -19,12 +19,10 @@ async function exitHandler(exit = false, exitCode?: number): Promise<void> {
         server.close()
     }
     if (exit) {
-        // eslint-disable-next-line unicorn/no-process-exit
         process.exit(exitCode)
     }
 }
 
-/* eslint-disable @typescript-eslint/no-misused-promises */
 // do something when app is closing
 process.on('exit', exitHandler.bind(undefined, false))
 // catches ctrl+c event
@@ -34,7 +32,6 @@ process.on('SIGUSR1', exitHandler.bind(undefined, true))
 process.on('SIGUSR2', exitHandler.bind(undefined, true))
 // catches uncaught exceptions
 process.on('uncaughtException', exitHandler.bind(undefined, true))
-/* eslint-enable @typescript-eslint/no-misused-promises */
 
 async function main() {
     const availablePorts = await Clib.getPorts()

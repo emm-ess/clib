@@ -8,14 +8,14 @@ import {
     isScalarCmd,
     isStartScanning, isStopAllDevices, isStopDevice,
     isStopScanning, isVibrateCmd,
-} from './buttplug'
-import type Clib from './clib.simple'
+} from './buttplug.js'
+import type Clib from './clib.simple.js'
 import {
     CLIB_DEVICE_DESCRIPTION_V2,
     CLIB_DEVICE_DESCRIPTION_V3,
     MAX_POWER,
     WEBSOCKET_PORT,
-} from './const'
+} from './const.js'
 
 log.setLevel('debug')
 
