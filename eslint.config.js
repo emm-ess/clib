@@ -23,9 +23,4 @@ export default [
         },
     },
     ...baseConfig,
-    {
-        rules: {
-            '@stylistic/block-spacing': ['error', 'never'],
-        },
-    },
 ]
